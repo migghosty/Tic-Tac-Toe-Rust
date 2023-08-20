@@ -109,6 +109,34 @@ fn check_win(board: [[char;3];3]) -> bool {
     false
 }
 
+fn play_again() -> bool {
+    loop {
+        let mut user_input = String::new();
+
+        println!("Do you want to play again (y/n)? ");
+
+        io::stdin()
+            .read_line(&mut user_input)
+            .expect("Failed to read user input");
+
+        match user_input.trim().parse::<char>() {
+            Ok(value) => {
+                if value == 'y' || value == 'Y' {
+                    return true;
+                } else if value == 'n' || value == 'N' {
+                    return false;
+                } else {
+                    println!("Enter 'y' or 'n'! 🤬");
+                }
+            },
+            Err(_) => {
+                println!("Enter a character please 😒");
+                continue;
+            },
+        };
+    }
+}
+
 fn main() {
     let mut board: [[char;3];3] = empty_board();
     let mut player: char = 'x';
@@ -123,6 +151,13 @@ fn main() {
         if check_win(board) {
             print_board(board);
             println!("Player {player} won :D");
+
+            if play_again() {
+                board = empty_board();
+                player = 'x';
+                println!();
+                continue;
+            }
             break;
         }
 
